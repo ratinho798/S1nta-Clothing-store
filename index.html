@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S1nta Clothing Store</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Only suggestions popup styling */
+        .search-box {
+            position: relative;
+        }
+
+        .suggestions-box {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 220px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            max-height: 220px;
+            overflow-y: auto;
+            text-align: left;
+            padding: 6px 0;
+        }
+
+        .suggestions-box.hidden {
+            display: none !important;
+        }
+
+        .suggestion-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: #000;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .suggestion-item:hover {
+            background: #f2f2f2;
+        }
+
+        body.dark-mode .suggestions-box {
+            background: #1e1e1e;
+            border: 1px solid #444;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        body.dark-mode .suggestion-item {
+            color: #fff;
+        }
+
+        body.dark-mode .suggestion-item:hover {
+            background: #333;
+        }
+
+        @media (max-width: 600px) {
+            .suggestions-box {
+                width: 100%;
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">S1NTA Clothing Store</div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="cart.html">Cart</a>
+    </nav>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search...">
+        <button type="button" id="searchBtn">🔍</button>
+        <div id="suggestionsBox" class="suggestions-box hidden"></div>
+    </div>
+
+    <button id="darkModeToggle" type="button">🌙</button>
+</header>
+
+<section class="hero fade-in">
+    <h1>New Season Arrivals</h1>
+    <p>S1NTA to the world</p>
+    <a href="#shop" class="btn">Shop Now</a>
+</section>
+
+<section class="categories">
+    <div class="category active" onclick="filterCategory('all', this)">All</div>
+    <div class="category" onclick="filterCategory('shirts', this)">Shirts</div>
+    <div class="category" onclick="filterCategory('bottoms', this)">Bottoms</div>
+    <div class="category" onclick="filterCategory('outerwear', this)">Outerwear</div>
+    <div class="category" onclick="filterCategory('accessories', this)">Accessories</div>
+</section>
+
+<main class="container">
+    <div class="products" id="shop">
+
+        <div class="product slide-up" data-category="accessories">
+            <div class="slideshow-container">
+                <div class="slide active-slide">
+                    <img src="images/skully 1.jpeg" alt="Skully 1">
+                    <h4>Skully #1</h4>
+                    <p>NAD 179.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/skully 2.jpeg" alt="Skully 2">
+                    <h4>Skully #2</h4>
+                    <p>NAD 179.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/skully 3.jpeg" alt="Skully 3">
+                    <h4>Skully #3</h4>
+                    <p>NAD 179.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/skully 4.jpeg" alt="Skully 4">
+                    <h4>Skully #4</h4>
+                    <p>NAD 179.99</p>
+                </div>
+            </div>
+
+            <div class="slide-controls">
+                <button type="button" onclick="changeSlide(this, -1)">❮ Prev</button>
+                <button type="button" onclick="changeSlide(this, 1)">Next ❯</button>
+            </div>
+
+            <h3>Skully Collection</h3>
+            <button type="button" class="add-btn" onclick="addCurrentSlideToCart(this)">Add to Cart</button>
+        </div>
+
+        <div class="product slide-up" data-category="accessories">
+            <div class="slideshow-container">
+                <div class="slide active-slide">
+                    <img src="images/socks.jpeg" alt="Socks 1">
+                    <h4>Socks #1</h4>
+                    <p>NAD 79.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/socks2.jpeg" alt="Socks 2">
+                    <h4>Socks #2</h4>
+                    <p>NAD 79.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/socks3.jpeg" alt="Socks 3">
+                    <h4>Socks #3</h4>
+                    <p>NAD 79.99</p>
+                </div>
+            </div>
+
+            <div class="slide-controls">
+                <button type="button" onclick="changeSlide(this, -1)">❮ Prev</button>
+                <button type="button" onclick="changeSlide(this, 1)">Next ❯</button>
+            </div>
+
+            <h3>Socks Collection</h3>
+            <button type="button" class="add-btn" onclick="addCurrentSlideToCart(this)">Add to Cart</button>
+        </div>
+
+        <div class="product slide-up" data-category="accessories">
+            <img src="images/beanie.jpeg" alt="Beanie">
+            <h3>Beanie</h3>
+            <p>NAD 179.99</p>
+            <button type="button" class="add-btn" onclick="addToCart('Beanie', 179.99)">Add to Cart</button>
+        </div>
+
+        <div class="product slide-up" data-category="bottoms">
+            <img src="images/pants.jpeg" alt="Sweats">
+            <h3>Cuffed Sweats</h3>
+            <p>NAD 399.99</p>
+            <button type="button" class="add-btn" onclick="addToCart('Cuffed Sweats', 399.99)">Add to Cart</button>
+        </div>
+
+        <div class="product slide-up" data-category="shirts">
+            <div class="slideshow-container">
+                <div class="slide active-slide">
+                    <img src="images/top 1.jpeg" alt="Crop Top Back">
+                    <h4>Crop Top Back</h4>
+                    <p>NAD 249.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/top 2.jpeg" alt="Crop Top Front">
+                    <h4>Crop Top Front</h4>
+                    <p>NAD 249.99</p>
+                </div>
+            </div>
+
+            <div class="slide-controls">
+                <button type="button" onclick="changeSlide(this, -1)">❮ Prev</button>
+                <button type="button" onclick="changeSlide(this, 1)">Next ❯</button>
+            </div>
+
+            <h3>Crop Top Collection</h3>
+            <button type="button" class="add-btn" onclick="addCurrentSlideToCart(this)">Add to Cart</button>
+        </div>
+
+        <div class="product slide-up" data-category="shirts">
+            <div class="slideshow-container">
+                <div class="slide active-slide">
+                    <img src="images/yellow.jpeg" alt="OG Tee 1">
+                    <h4>OG Tee #1</h4>
+                    <p>NAD 249.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/tshirt.jpeg" alt="OG Tee 2">
+                    <h4>OG Tee #2</h4>
+                    <p>NAD 249.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/red t.jpeg" alt="OG Tee 3">
+                    <h4>OG Tee #3</h4>
+                    <p>NAD 249.99</p>
+                </div>
+            </div>
+
+            <div class="slide-controls">
+                <button type="button" onclick="changeSlide(this, -1)">❮ Prev</button>
+                <button type="button" onclick="changeSlide(this, 1)">Next ❯</button>
+            </div>
+
+            <h3>OG Tee Collection</h3>
+            <button type="button" class="add-btn" onclick="addCurrentSlideToCart(this)">Add to Cart</button>
+        </div>
+
+        <div class="product slide-up" data-category="shirts">
+            <div class="slideshow-container">
+                <div class="slide active-slide">
+                    <img src="images/shirt 2.jpeg" alt="STB Collection 1">
+                    <h4>STB Collection #1</h4>
+                    <p>NAD 249.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/shirt 3.jpeg" alt="STB Collection 2">
+                    <h4>STB Collection #2</h4>
+                    <p>NAD 249.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/shirt 4.jpeg" alt="STB Collection 3">
+                    <h4>STB Collection #3</h4>
+                    <p>NAD 249.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/shirt 5.jpeg" alt="STB Collection 4">
+                    <h4>STB Collection #4</h4>
+                    <p>NAD 249.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/shirt 6.jpeg" alt="STB Collection 5">
+                    <h4>STB Collection #5</h4>
+                    <p>NAD 249.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/shirt 7.jpeg" alt="STB Collection 6">
+                    <h4>STB Collection #6</h4>
+                    <p>NAD 249.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/shirt 8.jpeg" alt="STB Collection 7">
+                    <h4>STB Collection #7</h4>
+                    <p>NAD 249.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/shirt 9.jpeg" alt="STB Collection 8">
+                    <h4>STB Collection #8</h4>
+                    <p>NAD 249.99</p>
+                </div>
+            </div>
+
+            <div class="slide-controls">
+                <button type="button" onclick="changeSlide(this, -1)">❮ Prev</button>
+                <button type="button" onclick="changeSlide(this, 1)">Next ❯</button>
+            </div>
+
+            <h3>STB Collection</h3>
+            <button type="button" class="add-btn" onclick="addCurrentSlideToCart(this)">Add to Cart</button>
+        </div>
+
+        <div class="product slide-up" data-category="outerwear">
+            <img src="images/hoodie.jpeg" alt="Zip Up Hoodie">
+            <h3>Zip Up Hoodie</h3>
+            <p>NAD 449.99</p>
+            <button type="button" class="add-btn" onclick="addToCart('Zip Up Hoodie', 449.99)">Add to Cart</button>
+        </div>
+
+        <div class="product slide-up" data-category="outerwear">
+            <div class="slideshow-container">
+                <div class="slide active-slide">
+                    <img src="images/normal hoodie.jpeg" alt="Hoodie 1">
+                    <h4>Hoodie #1</h4>
+                    <p>NAD 449.99</p>
+                </div>
+                <div class="slide">
+                    <img src="images/normalhoodie2.jpeg" alt="Hoodie 2">
+                    <h4>Hoodie #2</h4>
+                    <p>NAD 449.99</p>
+                </div>
+            </div>
+
+            <div class="slide-controls">
+                <button type="button" onclick="changeSlide(this, -1)">❮ Prev</button>
+                <button type="button" onclick="changeSlide(this, 1)">Next ❯</button>
+            </div>
+
+            <h3>Hoodie Collection</h3>
+            <button type="button" class="add-btn" onclick="addCurrentSlideToCart(this)">Add to Cart</button>
+        </div>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <p>&copy; S1nta Clothing Store</p>
+</footer>
+
+<script>
+    let currentCategory = "all";
+
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const suggestionsBox = document.getElementById("suggestionsBox");
+    const categoryButtons = document.querySelectorAll(".category");
+    const products = document.querySelectorAll(".product");
+
+    function applySavedTheme() {
+        const savedTheme = localStorage.getItem("theme");
+
+        if (savedTheme === "dark") {
+            document.body.classList.add("dark-mode");
+            if (darkModeToggle) darkModeToggle.textContent = "☀️";
+        } else {
+            document.body.classList.remove("dark-mode");
+            if (darkModeToggle) darkModeToggle.textContent = "🌙";
+        }
+    }
+
+    applySavedTheme();
+
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            const isDark = document.body.classList.contains("dark-mode");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+            darkModeToggle.textContent = isDark ? "☀️" : "🌙";
+        });
+    }
+
+    function setActiveCategory(category) {
+        currentCategory = category;
+
+        categoryButtons.forEach(btn => {
+            btn.classList.remove("active");
+            if (btn.textContent.trim().toLowerCase() === category) {
+                btn.classList.add("active");
+            }
+        });
+    }
+
+    function getAllProductNames() {
+        const names = [];
+
+        products.forEach(product => {
+            const h3 = product.querySelector("h3");
+            if (h3) {
+                names.push(h3.textContent.trim());
+            }
+
+            const slides = product.querySelectorAll(".slide h4");
+            slides.forEach(slideTitle => {
+                names.push(slideTitle.textContent.trim());
+            });
+        });
+
+        return [...new Set(names)];
+    }
+
+    function showSuggestions() {
+        const input = searchInput.value.toLowerCase().trim();
+        const allNames = getAllProductNames();
+
+        suggestionsBox.innerHTML = "";
+
+        if (input === "") {
+            suggestionsBox.classList.add("hidden");
+            applyFilters();
+            return;
+        }
+
+        const matched = allNames.filter(name =>
+            name.toLowerCase().includes(input)
+        );
+
+        if (matched.length === 0) {
+            suggestionsBox.classList.add("hidden");
+            applyFilters();
+            return;
+        }
+
+        matched.slice(0, 6).forEach(name => {
+            const item = document.createElement("div");
+            item.className = "suggestion-item";
+            item.textContent = name;
+
+            item.addEventListener("click", () => {
+                searchInput.value = name;
+                suggestionsBox.classList.add("hidden");
+                setActiveCategory("all");
+                applyFilters();
+            });
+
+            suggestionsBox.appendChild(item);
+        });
+
+        suggestionsBox.classList.remove("hidden");
+        applyFilters();
+    }
+
+    function searchProducts() {
+        const input = searchInput.value.toLowerCase().trim();
+
+        if (input !== "") {
+            setActiveCategory("all");
+        }
+
+        applyFilters();
+        suggestionsBox.classList.add("hidden");
+    }
+
+    function filterCategory(category, btn) {
+        currentCategory = category;
+
+        categoryButtons.forEach(c => c.classList.remove("active"));
+        btn.classList.add("active");
+
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const input = searchInput.value.toLowerCase().trim();
+
+        products.forEach(product => {
+            const category = (product.dataset.category || "").toLowerCase();
+            const searchableText = product.textContent.toLowerCase().replace(/\s+/g, " ").trim();
+
+            const matchesSearch = input === "" || searchableText.includes(input);
+            const matchesCategory = currentCategory === "all" || category === currentCategory;
+
+            if (matchesSearch && matchesCategory) {
+                product.classList.remove("hidden");
+            } else {
+                product.classList.add("hidden");
+            }
+        });
+    }
+
+    function changeSlide(button, direction) {
+        const product = button.closest(".product");
+        const slides = product.querySelectorAll(".slide");
+        let currentIndex = 0;
+
+        slides.forEach((slide, index) => {
+            if (slide.classList.contains("active-slide")) {
+                currentIndex = index;
+            }
+            slide.classList.remove("active-slide");
+        });
+
+        let newIndex = currentIndex + direction;
+
+        if (newIndex < 0) newIndex = slides.length - 1;
+        if (newIndex >= slides.length) newIndex = 0;
+
+        slides[newIndex].classList.add("active-slide");
+    }
+
+    function addCurrentSlideToCart(button) {
+        const product = button.closest(".product");
+        const activeSlide = product.querySelector(".slide.active-slide");
+
+        const name = activeSlide.querySelector("h4").textContent;
+        const priceText = activeSlide.querySelector("p").textContent;
+        const price = parseFloat(priceText.replace("NAD", "").trim());
+
+        addToCart(name, price);
+    }
+
+    function addToCart(name, price) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        const existingItem = cart.find(item => item.name === name);
+
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.push({
+                name: name,
+                price: price,
+                quantity: 1
+            });
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert(name + " added to cart!");
+    }
+
+    if (searchBtn) {
+        searchBtn.addEventListener("click", searchProducts);
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener("input", showSuggestions);
+
+        searchInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                searchProducts();
+            }
+        });
+    }
+
+    document.addEventListener("click", function(event) {
+        if (!event.target.closest(".search-box")) {
+            suggestionsBox.classList.add("hidden");
+        }
+    });
+
+    applyFilters();
+</script>
+
+</body>
+</html>
